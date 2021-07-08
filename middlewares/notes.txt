@@ -1,0 +1,3 @@
+validar si esta logueado
+validar si es admin
+validar si existe/no existe
