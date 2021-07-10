@@ -3,6 +3,7 @@ require('./db/sync')({ alter: true });
 const express = require('express');
 const helmet = require('helmet');
 const routes = require('./routes');
+// const authenticator = require('./middlewares/authenticator');
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(helmet());
 app.use('/login', routes.login);
 app.use('/signup', routes.signup);
 app.use('/usuarios', routes.usuarios);
+app.use('/productos', routes.productos);
 
 const PORT = 4000;
 

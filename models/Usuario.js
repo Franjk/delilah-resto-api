@@ -17,8 +17,11 @@ const Usuario = sequelize.define('Usuario', {
   },
   email: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
     unique: true,
+    validate: {
+      isEmail: true,
+    },
   },
   direccion: {
     type: DataTypes.TEXT,
@@ -28,8 +31,13 @@ const Usuario = sequelize.define('Usuario', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  idRol: {
-    type: DataTypes.TEXT,
+  rol: {
+    type: DataTypes.STRING(10),
+    validate: {
+      isIn: [['client', 'admin']],
+    },
+    allowNull: false,
+    defaultValue: 'client',
   },
 }, {
   // Other model options go here

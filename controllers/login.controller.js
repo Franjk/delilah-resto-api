@@ -3,20 +3,21 @@ const Usuario = require('../models/Usuario');
 
 exports.login = async (req, res) => {
   const { username, email, password } = req.body;
-  let query;
+  const query = {};
+  const where = {};
 
   if (username) {
-    query = { username };
+    where.username = username;
   } else if (email) {
-    query = { email };
+    where.email = email;
   } else {
     return res.status(400).send({ error: 'Missing username or password' });
   }
 
+  query.where = where;
+
   try {
-    const user = await Usuario.findOne({
-      where: query,
-    });
+    const user = await Usuario.findOne(query);
     console.log('user', user);
     if (user.password === password) {
       const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET);
