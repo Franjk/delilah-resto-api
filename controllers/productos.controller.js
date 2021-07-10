@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const Producto = require('../models/Producto');
+const { Producto } = require('../models');
 
 exports.readAll = async (req, res) => {
   const query = {};

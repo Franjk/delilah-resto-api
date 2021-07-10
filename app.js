@@ -1,9 +1,13 @@
 require('dotenv').config();
-require('./db/sync')({ alter: true });
 const express = require('express');
 const helmet = require('helmet');
+const sync = require('./db/sync');
 const routes = require('./routes');
 // const authenticator = require('./middlewares/authenticator');
+
+const { NODE_ENV, PORT } = process.env;
+
+if (NODE_ENV === 'development') sync({ force: true });
 
 const app = express();
 
@@ -16,8 +20,6 @@ app.use('/signup', routes.signup);
 app.use('/usuarios', routes.usuarios);
 app.use('/productos', routes.productos);
 
-const PORT = 4000;
-
-app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
+app.listen(PORT || 4000, () => {
+  console.log(`App listening on port ${PORT || 4000}`);
 });

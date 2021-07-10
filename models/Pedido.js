@@ -1,19 +1,16 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db/connection');
 
-const Producto = sequelize.define('Producto', {
-  nombre: {
+const Pedido = sequelize.define('Pedido', {
+  estado: {
     type: DataTypes.STRING,
-    unique: true,
+    allowNull: false,
+    defaultValue: 'Nuevo',
   },
-  descripcion: {
-    type: DataTypes.TEXT,
-  },
-  imagen: {
+  formaDePago: {
     type: DataTypes.STRING,
-    validate: {
-      isUrl: true,
-    },
+    allowNull: false,
+    defaultValue: 'Contado',
   },
   precio: {
     type: DataTypes.DOUBLE,
@@ -21,7 +18,7 @@ const Producto = sequelize.define('Producto', {
   },
 }, {
   sequelize,
-  tableName: 'Productos',
+  tableName: 'Pedidos',
 });
 
-module.exports = Producto;
+module.exports = Pedido;
