@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db/connection');
 
-const Producto = sequelize.define('Producto', {
+const Producto = sequelize.define('producto', {
   nombre: {
     type: DataTypes.STRING,
     unique: true,
@@ -17,7 +17,7 @@ const Producto = sequelize.define('Producto', {
   },
   precio: {
     type: DataTypes.DOUBLE,
-    allowNull: false,
+    allowNull: true,
   },
 }, {
   sequelize,

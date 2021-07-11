@@ -8,6 +8,10 @@ Pedido.belongsTo(Usuario);
 Pedido.belongsToMany(Producto, { through: PedidoProducto });
 Producto.belongsToMany(Pedido, { through: PedidoProducto });
 Producto.belongsToMany(Usuario, { through: UsuarioProducto });
+Pedido.hasMany(PedidoProducto);
+UsuarioProducto.belongsTo(Pedido);
+Producto.hasMany(PedidoProducto);
+PedidoProducto.belongsTo(Producto);
 Usuario.belongsToMany(Producto, { through: UsuarioProducto });
 
 module.exports = {

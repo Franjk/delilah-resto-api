@@ -1,11 +1,14 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db/connection');
 
-const Pedido = sequelize.define('Pedido', {
+const Pedido = sequelize.define('pedido', {
   estado: {
     type: DataTypes.STRING,
     allowNull: false,
-    defaultValue: 'Nuevo',
+    defaultValue: 'NUEVO',
+    validate: {
+      isIn: [['NUEVO', 'CONFIRMADO', 'PREPARANDO', 'ENVIANDO', 'CANCELADO', 'ENTREGADO']],
+    },
   },
   formaDePago: {
     type: DataTypes.STRING,
@@ -14,7 +17,7 @@ const Pedido = sequelize.define('Pedido', {
   },
   precio: {
     type: DataTypes.DOUBLE,
-    allowNull: false,
+    allowNull: true,
   },
 }, {
   sequelize,

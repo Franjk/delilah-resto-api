@@ -1,3 +1,12 @@
 validar si esta logueado
 validar si es admin
 validar si existe/no existe
+
+req.
+baseUrl: '/productos',
+originalUrl: '/productos?limit=1&offset=asd',
+url: '/?limit=1&offset=asd',
+method: 'GET',
+
+
+Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmcmFuIiwiaWF0IjoxNjI1OTg1OTY0fQ.u4qQLhJCscUTblVO1boSgZzrIPnXfZKflHa34zVON7Q

@@ -15,10 +15,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
 
-app.use('/login', routes.login);
-app.use('/signup', routes.signup);
+app.use('/auth', routes.auth);
 app.use('/usuarios', routes.usuarios);
 app.use('/productos', routes.productos);
+app.use('/pedidos', routes.pedidos);
 
 app.listen(PORT || 4000, () => {
   console.log(`App listening on port ${PORT || 4000}`);

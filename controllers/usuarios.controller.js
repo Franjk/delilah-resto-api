@@ -2,11 +2,11 @@ const { Op } = require('sequelize');
 const Usuario = require('../models/Usuario');
 
 exports.readAll = async (req, res) => {
-  const query = {};
-  const where = {};
   const {
     limit, offset, username, nombre, telefono, email, direccion, rol,
   } = req.query;
+  const query = {};
+  const where = {};
 
   if (nombre) where.nombre = { [Op.like]: `%${nombre}%` };
   if (username) where.username = { [Op.like]: `%${username}%` };
@@ -21,7 +21,7 @@ exports.readAll = async (req, res) => {
   if (offset) query.offset = Number.parseInt(offset, 10);
 
   try {
-    const usuarios = await Usuario.findAll(query); // filtrar el password?
+    const usuarios = await Usuario.findAll(query);
     res.send(usuarios);
   } catch (err) {
     res.status(400).send(err);

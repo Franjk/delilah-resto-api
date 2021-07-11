@@ -1,5 +1,49 @@
 const { Op } = require('sequelize');
-const { Producto } = require('../models');
+const { Pedido, Producto, PedidoProducto } = require('../models');
+const sequelize = require('../db/connection');
+
+exports.create = async (req, res) => {
+  const usuarioId = 1;
+  const {
+    formaDePago, productos,
+  } = req.body;
+
+  const query = {};
+  query.where = { id: { [Op.in]: productos.map((el) => el.id) } };
+
+  const t = await sequelize.transaction();
+
+  try {
+    const productosData = await Producto.findAll(query);
+    // if (productosData.length !== productos.length) throw new Error('Id de producto invalida');
+
+    let total = 0;
+    productosData.forEach((pd) => {
+      const producto = productos.find((el) => el.id === pd.id);
+      producto.precio = pd.precio;
+      producto.nombre = pd.nombre;
+      total += pd.precio * producto.cantidad;
+    });
+
+    const newPedido = await Pedido.create({
+      formaDePago, usuarioId, precio: total,
+    }, { transaction: t });
+
+    const pedidoId = newPedido.id;
+    const productosCreate = productos.map((el) => ({
+      pedidoId, productoId: el.id, cantidad: el.cantidad, precio: el.precio,
+    }));
+    await PedidoProducto.bulkCreate(productosCreate, { transaction: t });
+
+    await t.commit();
+
+    newPedido.dataValues.productos = productos;
+    res.status(201).send(newPedido);
+  } catch (err) {
+    await t.rollback();
+    res.status(400).send(err); // en el futuro mandar solo el error message
+  }
+};
 
 exports.readAll = async (req, res) => {
   const {
@@ -22,7 +66,7 @@ exports.readAll = async (req, res) => {
   if (offset) query.offset = Number.parseInt(offset, 10);
 
   try {
-    const productos = await Producto.findAll(query);
+    const productos = await Pedido.findAll(query);
     res.send(productos);
   } catch (err) {
     res.status(400).send(err);
@@ -36,7 +80,7 @@ exports.readOne = async (req, res) => {
   query.where = { id };
 
   try {
-    const producto = await Producto.findOne(query);
+    const producto = await Pedido.findOne(query);
     if (producto) {
       res.send(producto);
     } else {
@@ -47,21 +91,6 @@ exports.readOne = async (req, res) => {
   }
 };
 
-exports.create = async (req, res) => {
-  const {
-    nombre, descripcion, imagen, precio,
-  } = req.body;
-
-  try {
-    const newProducto = await Producto.create({
-      nombre, descripcion, imagen, precio,
-    });
-    res.status(201).send(newProducto);
-  } catch (err) {
-    res.status(400).send(err); // en el futuro mandar solo el error message
-  }
-};
-
 exports.delete = async (req, res) => {
   const { id } = req.params;
   const query = {};
@@ -69,7 +98,7 @@ exports.delete = async (req, res) => {
   query.where = { id };
 
   try {
-    const deletedCount = await Producto.destroy(query);
+    const deletedCount = await Pedido.destroy(query);
     if (deletedCount) {
       res.send({ message: `Producto ${id} eliminado` });
     } else {
@@ -90,7 +119,7 @@ exports.update = async (req, res) => {
   query.where = { id };
 
   try {
-    const updateCount = await Producto.update({
+    const updateCount = await Pedido.update({
       nombre, descripcion, imagen, precio,
     }, query);
 

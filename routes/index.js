@@ -1,11 +1,11 @@
-const usuarios = require('./usuarios.routes');
+const auth = require('./auth.routes');
+const pedidos = require('./pedidos.routes');
 const productos = require('./productos.routes');
-const login = require('./login.routes');
-const signup = require('./signup.routes');
+const usuarios = require('./usuarios.routes');
 
 module.exports = {
-  usuarios,
+  auth,
+  pedidos,
   productos,
-  login,
-  signup,
+  usuarios,
 };

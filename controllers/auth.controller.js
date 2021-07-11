@@ -28,3 +28,18 @@ exports.login = async (req, res) => {
     return res.status(400).send(err);
   }
 };
+
+exports.register = async (req, res) => {
+  const {
+    username, nombre, telefono, email, direccion, password, rol,
+  } = req.body;
+
+  try {
+    const newUsuario = await Usuario.create({
+      username, nombre, telefono, email, direccion, password, rol,
+    });
+    res.status(201).send(newUsuario);
+  } catch (err) {
+    res.status(400).send(err); // en el futuro mandar solo el error message
+  }
+};
