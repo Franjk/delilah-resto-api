@@ -1,69 +1,65 @@
 const { Op } = require('sequelize');
-const { Pedido, Producto, PedidoProducto } = require('../models');
-const sequelize = require('../db/connection');
+const {
+  Pedido, Producto, PedidoProducto, Usuario,
+} = require('../models');
 
 exports.create = async (req, res) => {
   const usuarioId = 1;
   const {
-    formaDePago, productos,
+    estado, formaDePago, pedidoProductos,
   } = req.body;
 
   const query = {};
-  query.where = { id: { [Op.in]: productos.map((el) => el.id) } };
-
-  const t = await sequelize.transaction();
+  query.where = { id: { [Op.in]: pedidoProductos.map((el) => el.productoId) } };
 
   try {
     const productosData = await Producto.findAll(query);
-    // if (productosData.length !== productos.length) throw new Error('Id de producto invalida');
 
-    let total = 0;
     productosData.forEach((pd) => {
-      const producto = productos.find((el) => el.id === pd.id);
-      producto.precio = pd.precio;
-      producto.nombre = pd.nombre;
-      total += pd.precio * producto.cantidad;
+      const pedidoProducto = pedidoProductos.find((el) => el.productoId === pd.id);
+      pedidoProducto.precioUnitario = pd.precio;
     });
 
-    const newPedido = await Pedido.create({
-      formaDePago, usuarioId, precio: total,
-    }, { transaction: t });
+    const newPedido = await Pedido.create(
+      {
+        estado, formaDePago, usuarioId, pedidoProductos,
+      },
+      {
+        include: PedidoProducto,
+      },
+    );
 
-    const pedidoId = newPedido.id;
-    const productosCreate = productos.map((el) => ({
-      pedidoId, productoId: el.id, cantidad: el.cantidad, precio: el.precio,
-    }));
-    await PedidoProducto.bulkCreate(productosCreate, { transaction: t });
-
-    await t.commit();
-
-    newPedido.dataValues.productos = productos;
     res.status(201).send(newPedido);
   } catch (err) {
-    await t.rollback();
     res.status(400).send(err); // en el futuro mandar solo el error message
   }
 };
 
 exports.readAll = async (req, res) => {
   const {
-    limit, offset, nombre, descripcion, imagen, precio, minPrecio, maxPrecio,
+    limit, offset, estado, formaDePago, total, minTotal, maxTotal, usuarioId,
   } = req.query;
   const query = {};
   const where = {};
 
-  if (nombre) where.nombre = { [Op.like]: `%${nombre}%` };
-  if (descripcion) where.descripcion = { [Op.like]: `%${descripcion}%` };
-  if (imagen) where.imagen = { [Op.like]: `%${imagen}%` };
+  if (estado) where.estado = { [Op.like]: `%${estado}%` };
+  if (formaDePago) where.formaDePago = { [Op.like]: `%${formaDePago}%` };
+  if (usuarioId) where.usuarioId = usuarioId;
 
-  if (minPrecio) where.precio = { [Op.gte]: minPrecio };
-  if (maxPrecio) where.precio = { [Op.lte]: maxPrecio };
-  if (minPrecio && maxPrecio) where.precio = { [Op.gte]: minPrecio, [Op.lte]: maxPrecio };
-  if (precio) where.precio = precio;
+  if (minTotal) where.precio = { [Op.gte]: minTotal };
+  if (maxTotal) where.precio = { [Op.lte]: maxTotal };
+  if (minTotal && maxTotal) where.precio = { [Op.gte]: minTotal, [Op.lte]: maxTotal };
+  if (total) where.total = total;
 
   query.where = where;
   if (limit) query.limit = Number.parseInt(limit, 10);
   if (offset) query.offset = Number.parseInt(offset, 10);
+  query.include = [
+    {
+      model: PedidoProducto,
+      attributes: { exclude: ['pedidoId'] },
+    },
+  ];
 
   try {
     const productos = await Pedido.findAll(query);
@@ -78,13 +74,52 @@ exports.readOne = async (req, res) => {
   const query = {};
 
   query.where = { id };
+  query.attributes = { exclude: ['usuarioId'] };
+  query.include = [
+    {
+      model: PedidoProducto,
+      attributes: ['cantidad'],
+      include: {
+        model: Producto,
+        attributes: ['id', 'precio', 'nombre'],
+      },
+    },
+    {
+      model: Usuario,
+      attributes: { exclude: ['password', 'rol'] },
+    },
+  ];
 
   try {
     const producto = await Pedido.findOne(query);
     if (producto) {
       res.send(producto);
     } else {
-      res.send({ error: `Producto ${id} no encontrado` });
+      res.send({ error: `Pedido ${id} no encontrado` });
+    }
+  } catch (err) {
+    res.status(400).send(err);
+  }
+};
+
+exports.update = async (req, res) => {
+  const { id } = req.params;
+  const {
+    estado, formaDePago,
+  } = req.body;
+  const query = {};
+
+  query.where = { id };
+
+  try {
+    const updateCount = await Pedido.update({
+      estado, formaDePago,
+    }, query);
+
+    if (updateCount) {
+      res.send({ message: `Pedido ${id} actualizado` });
+    } else {
+      res.send({ error: `Pedido ${id} no encontrado` });
     }
   } catch (err) {
     res.status(400).send(err);
@@ -100,33 +135,9 @@ exports.delete = async (req, res) => {
   try {
     const deletedCount = await Pedido.destroy(query);
     if (deletedCount) {
-      res.send({ message: `Producto ${id} eliminado` });
+      res.send({ message: `Pedido ${id} eliminado` });
     } else {
-      res.send({ error: `Producto ${id} no encontrado` });
-    }
-  } catch (err) {
-    res.status(400).send(err);
-  }
-};
-
-exports.update = async (req, res) => {
-  const { id } = req.params;
-  const {
-    nombre, descripcion, imagen, precio,
-  } = req.body;
-  const query = {};
-
-  query.where = { id };
-
-  try {
-    const updateCount = await Pedido.update({
-      nombre, descripcion, imagen, precio,
-    }, query);
-
-    if (updateCount) {
-      res.send({ message: `Producto ${id} actualizado` });
-    } else {
-      res.send({ error: `Producto ${id} no encontrado` });
+      res.send({ error: `Pedido ${id} no encontrado` });
     }
   } catch (err) {
     res.status(400).send(err);

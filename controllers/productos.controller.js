@@ -1,6 +1,21 @@
 const { Op } = require('sequelize');
 const { Producto } = require('../models');
 
+exports.create = async (req, res) => {
+  const {
+    nombre, descripcion, imagen, precio,
+  } = req.body;
+
+  try {
+    const newProducto = await Producto.create({
+      nombre, descripcion, imagen, precio,
+    });
+    res.status(201).send(newProducto);
+  } catch (err) {
+    res.status(400).send(err); // en el futuro mandar solo el error message
+  }
+};
+
 exports.readAll = async (req, res) => {
   const {
     limit, offset, nombre, descripcion, imagen, precio, minPrecio, maxPrecio,
@@ -47,39 +62,6 @@ exports.readOne = async (req, res) => {
   }
 };
 
-exports.create = async (req, res) => {
-  const {
-    nombre, descripcion, imagen, precio,
-  } = req.body;
-
-  try {
-    const newProducto = await Producto.create({
-      nombre, descripcion, imagen, precio,
-    });
-    res.status(201).send(newProducto);
-  } catch (err) {
-    res.status(400).send(err); // en el futuro mandar solo el error message
-  }
-};
-
-exports.delete = async (req, res) => {
-  const { id } = req.params;
-  const query = {};
-
-  query.where = { id };
-
-  try {
-    const deletedCount = await Producto.destroy(query);
-    if (deletedCount) {
-      res.send({ message: `Producto ${id} eliminado` });
-    } else {
-      res.send({ error: `Producto ${id} no encontrado` });
-    }
-  } catch (err) {
-    res.status(400).send(err);
-  }
-};
-
 exports.update = async (req, res) => {
   const { id } = req.params;
   const {
@@ -96,6 +78,24 @@ exports.update = async (req, res) => {
 
     if (updateCount) {
       res.send({ message: `Producto ${id} actualizado` });
+    } else {
+      res.send({ error: `Producto ${id} no encontrado` });
+    }
+  } catch (err) {
+    res.status(400).send(err);
+  }
+};
+
+exports.delete = async (req, res) => {
+  const { id } = req.params;
+  const query = {};
+
+  query.where = { id };
+
+  try {
+    const deletedCount = await Producto.destroy(query);
+    if (deletedCount) {
+      res.send({ message: `Producto ${id} eliminado` });
     } else {
       res.send({ error: `Producto ${id} no encontrado` });
     }

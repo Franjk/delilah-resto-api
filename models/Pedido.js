@@ -12,12 +12,8 @@ const Pedido = sequelize.define('pedido', {
   },
   formaDePago: {
     type: DataTypes.STRING,
-    allowNull: false,
-    defaultValue: 'Contado',
-  },
-  precio: {
-    type: DataTypes.DOUBLE,
     allowNull: true,
+    defaultValue: 'Contado',
   },
 }, {
   sequelize,

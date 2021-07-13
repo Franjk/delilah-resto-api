@@ -6,13 +6,12 @@ const PedidoProducto = sequelize.define('pedidoProducto', {
     type: DataTypes.INTEGER,
     allowNull: true,
   },
-  precio: {
+  precioUnitario: {
     type: DataTypes.DOUBLE,
-    allowNull: true,
   },
 }, {
   sequelize,
-  tableName: 'PedidosProductos',
+  tableName: 'PedidoProductos',
   timestamps: false,
 });
 

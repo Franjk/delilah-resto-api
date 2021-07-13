@@ -1,4 +1,6 @@
-const { Producto, Usuario } = require('../models');
+const {
+  Producto, Usuario, Pedido, PedidoProducto,
+} = require('../models');
 
 async function populate() {
   await Producto.bulkCreate([
@@ -25,6 +27,46 @@ async function populate() {
       username: 'fran4', nombre: 'francisco4', password: '123', email: 'fran4@mail.com', rol: 'client',
     },
   ]);
+
+  await Pedido.bulkCreate([
+    {
+      estado: 'NUEVO',
+      formaDePago: 'CONTADO',
+      total: 552,
+      usuarioId: 1,
+      pedidoProductos: [
+        {
+          cantidad: 2,
+          precioUnitario: 100,
+          productoId: 2,
+        },
+        {
+          cantidad: 1,
+          precioUnitario: 40,
+          productoId: 3,
+        },
+      ],
+    },
+    {
+      estado: 'CONFIRMADO',
+      formaDePago: 'TARJETA',
+      total: 552,
+      usuarioId: 1,
+      pedidoProductos: [
+        {
+          cantidad: 2,
+          precioUnitario: 256,
+          productoId: 2,
+        },
+        {
+          cantidad: 1,
+          precioUnitario: 40,
+          productoId: 3,
+        },
+      ],
+    },
+  ],
+  { include: PedidoProducto });
 }
 
 module.exports = populate;

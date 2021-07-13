@@ -6,18 +6,22 @@ const UsuarioProducto = require('./UsuarioProducto');
 
 Pedido.belongsTo(Usuario);
 Pedido.belongsToMany(Producto, { through: PedidoProducto });
+Pedido.hasMany(PedidoProducto);
+
 Producto.belongsToMany(Pedido, { through: PedidoProducto });
 Producto.belongsToMany(Usuario, { through: UsuarioProducto });
-Pedido.hasMany(PedidoProducto);
-UsuarioProducto.belongsTo(Pedido);
 Producto.hasMany(PedidoProducto);
+
 PedidoProducto.belongsTo(Producto);
+
 Usuario.belongsToMany(Producto, { through: UsuarioProducto });
 
+UsuarioProducto.belongsTo(Pedido);
+
 module.exports = {
+  PedidoProducto,
+  UsuarioProducto,
   Usuario,
   Producto,
   Pedido,
-  PedidoProducto,
-  UsuarioProducto,
 };
