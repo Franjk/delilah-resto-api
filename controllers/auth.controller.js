@@ -20,7 +20,7 @@ exports.login = async (req, res) => {
     const user = await Usuario.findOne(query);
     console.log('user', user);
     if (user.password === password) {
-      const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET);
+      const token = jwt.sign({ id: user.id, rol: user.rol }, process.env.JWT_SECRET);
       return res.send({ token });
     }
     return res.status(403).send({ error: 'Invalid username or password' });

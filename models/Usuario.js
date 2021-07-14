@@ -34,10 +34,10 @@ const Usuario = sequelize.define('usuario', {
   rol: {
     type: DataTypes.STRING(10),
     validate: {
-      isIn: [['client', 'admin']],
+      isIn: [['CLIENTE', 'ADMIN']],
     },
     allowNull: false,
-    defaultValue: 'client',
+    defaultValue: 'CLIENTE',
   },
 }, {
   sequelize,

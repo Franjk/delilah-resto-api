@@ -76,7 +76,7 @@ exports.update = async (req, res) => {
       username, nombre, telefono, email, direccion, rol,
     }, query);
 
-    if (updateCount) {
+    if (updateCount > 0) {
       res.send({ message: `Usuario ${id} actualizado` });
     } else {
       res.send({ error: `Usuario ${id} no encontrado` });
@@ -94,7 +94,7 @@ exports.delete = async (req, res) => {
 
   try {
     const deletedCount = await Usuario.destroy(query);
-    if (deletedCount) {
+    if (deletedCount > 0) {
       res.send({ message: `Usuario ${id} eliminado` });
     } else {
       res.send({ error: `Usuario ${id} no encontrado` });

@@ -4,7 +4,7 @@ const Pedido = require('./Pedido');
 const PedidoProducto = require('./PedidoProducto');
 const UsuarioProducto = require('./UsuarioProducto');
 
-Pedido.belongsTo(Usuario);
+Pedido.belongsTo(Usuario, { foreignKey: { allowNull: false } });
 Pedido.belongsToMany(Producto, { through: PedidoProducto });
 Pedido.hasMany(PedidoProducto);
 
@@ -15,8 +15,9 @@ Producto.hasMany(PedidoProducto);
 PedidoProducto.belongsTo(Producto);
 
 Usuario.belongsToMany(Producto, { through: UsuarioProducto });
+Usuario.hasMany(Pedido);
 
-UsuarioProducto.belongsTo(Pedido);
+UsuarioProducto.belongsTo(Usuario);
 
 module.exports = {
   PedidoProducto,

@@ -1,13 +1,15 @@
 const { Op } = require('sequelize');
 const {
-  Pedido, Producto, PedidoProducto, Usuario,
+  Pedido, Producto, PedidoProducto,
 } = require('../models');
 
 exports.create = async (req, res) => {
-  const usuarioId = 1;
   const {
     estado, formaDePago, pedidoProductos,
   } = req.body;
+  let { usuarioId } = req.body;
+
+  if (req.auth.rol === 'CLIENTE') usuarioId = req.auth.id;
 
   const query = {};
   query.where = { id: { [Op.in]: pedidoProductos.map((el) => el.productoId) } };
@@ -37,10 +39,14 @@ exports.create = async (req, res) => {
 
 exports.readAll = async (req, res) => {
   const {
-    limit, offset, estado, formaDePago, total, minTotal, maxTotal, usuarioId,
+    limit, offset, estado, formaDePago, total, minTotal, maxTotal,
   } = req.query;
+  let { usuarioId } = req.query;
+
   const query = {};
   const where = {};
+
+  if (req.auth.rol === 'CLIENTE') usuarioId = req.auth.id;
 
   if (estado) where.estado = { [Op.like]: `%${estado}%` };
   if (formaDePago) where.formaDePago = { [Op.like]: `%${formaDePago}%` };
@@ -74,7 +80,6 @@ exports.readOne = async (req, res) => {
   const query = {};
 
   query.where = { id };
-  query.attributes = { exclude: ['usuarioId'] };
   query.include = [
     {
       model: PedidoProducto,
@@ -83,10 +88,6 @@ exports.readOne = async (req, res) => {
         model: Producto,
         attributes: ['id', 'precio', 'nombre'],
       },
-    },
-    {
-      model: Usuario,
-      attributes: { exclude: ['password', 'rol'] },
     },
   ];
 

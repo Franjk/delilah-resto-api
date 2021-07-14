@@ -3,7 +3,7 @@ const express = require('express');
 const helmet = require('helmet');
 const sync = require('./db/sync');
 const routes = require('./routes');
-// const authenticator = require('./middlewares/authenticator');
+const authenticator = require('./middlewares/authenticator');
 
 const { NODE_ENV, PORT } = process.env;
 
@@ -16,9 +16,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
 
 app.use('/auth', routes.auth);
-app.use('/usuarios', routes.usuarios);
-app.use('/productos', routes.productos);
-app.use('/pedidos', routes.pedidos);
+app.use('/usuarios', authenticator, routes.usuarios);
+app.use('/productos', authenticator, routes.productos);
+app.use('/pedidos', authenticator, routes.pedidos);
 
 app.listen(PORT || 4000, () => {
   console.log(`App listening on port ${PORT || 4000}`);

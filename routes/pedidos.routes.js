@@ -1,16 +1,17 @@
 const express = require('express');
 const pedidosController = require('../controllers/pedidos.controller');
+const authorize = require('../middlewares/authorizer');
 
 const router = express.Router();
 
-router.post('/', pedidosController.create);
+router.post('/', authorize('CLIENTE'), pedidosController.create);
 
-router.get('/', pedidosController.readAll);
+router.get('/', authorize('CLIENTE'), pedidosController.readAll);
 
-router.get('/:id', pedidosController.readOne);
+router.get('/:id', authorize('CLIENTE'), pedidosController.readOne);
 
-router.put('/:id', pedidosController.update);
+router.put('/:id', authorize(), pedidosController.update);
 
-router.delete('/:id', pedidosController.delete);
+router.delete('/:id', authorize(), pedidosController.delete);
 
 module.exports = router;
