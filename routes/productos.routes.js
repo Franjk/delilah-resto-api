@@ -8,10 +8,10 @@ router.post('/', authorize(), productosController.create);
 
 router.get('/', authorize('CLIENTE'), productosController.readAll);
 
-router.get('/:id', authorize('CLIENTE'), productosController.readOne);
+router.get('/:productoId', authorize('CLIENTE'), productosController.readOne);
 
-router.put('/:id', authorize(), productosController.update);
+router.put('/:productoId', authorize(), productosController.update);
 
-router.delete('/:id', authorize(), productosController.delete);
+router.delete('/:productoId', authorize(), productosController.delete);
 
 module.exports = router;

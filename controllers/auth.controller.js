@@ -11,7 +11,7 @@ exports.login = async (req, res) => {
   } else if (email) {
     where.email = email;
   } else {
-    return res.status(400).send({ error: 'Missing username or password' });
+    return res.status(401).send({ error: 'Missing username or password' });
   }
 
   query.where = where;
@@ -23,7 +23,7 @@ exports.login = async (req, res) => {
       const token = jwt.sign({ id: user.id, rol: user.rol }, process.env.JWT_SECRET);
       return res.send({ token });
     }
-    return res.status(403).send({ error: 'Invalid username or password' });
+    return res.status(401).send({ error: 'Invalid username or password' });
   } catch (err) {
     return res.status(400).send(err);
   }

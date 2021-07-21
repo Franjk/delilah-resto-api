@@ -2,7 +2,7 @@ const { UsuarioProducto } = require('../models');
 
 exports.create = async (req, res) => {
   const { productoId } = req.body;
-  const { id: usuarioId } = req.params;
+  const { usuarioId } = req.params;
 
   try {
     const newUsuarioProducto = await UsuarioProducto.create({
@@ -18,7 +18,7 @@ exports.readAll = async (req, res) => {
   const {
     limit, offset, productoId,
   } = req.query;
-  const { id: usuarioId } = req.params;
+  const { usuarioId } = req.params;
   const query = {};
   const where = {};
 
@@ -26,6 +26,7 @@ exports.readAll = async (req, res) => {
   if (usuarioId) where.usuarioId = usuarioId;
 
   query.where = where;
+  query.attributes = { exclude: ['usuarioId'] };
   if (limit) query.limit = Number.parseInt(limit, 10);
   if (offset) query.offset = Number.parseInt(offset, 10);
 
@@ -38,10 +39,11 @@ exports.readAll = async (req, res) => {
 };
 
 exports.readOne = async (req, res) => {
-  const { id: usuarioId, productoId } = req.params;
+  const { usuarioId, productoId } = req.params;
   const query = {};
 
   query.where = { usuarioId, productoId };
+  query.attributes = { exclude: ['usuarioId'] };
 
   try {
     const producto = await UsuarioProducto.findOne(query);
@@ -56,7 +58,7 @@ exports.readOne = async (req, res) => {
 };
 
 exports.delete = async (req, res) => {
-  const { id: usuarioId, productoId } = req.params;
+  const { usuarioId, productoId } = req.params;
   const query = {};
 
   query.where = { usuarioId, productoId };

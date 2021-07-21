@@ -76,10 +76,10 @@ exports.readAll = async (req, res) => {
 };
 
 exports.readOne = async (req, res) => {
-  const { id } = req.params;
+  const { pedidoId } = req.params;
   const query = {};
 
-  query.where = { id };
+  query.where = { id: pedidoId };
   query.include = [
     {
       model: PedidoProducto,
@@ -94,23 +94,23 @@ exports.readOne = async (req, res) => {
   try {
     const producto = await Pedido.findOne(query);
     if (producto) {
-      res.send(producto);
-    } else {
-      res.send({ error: `Pedido ${id} no encontrado` });
+      if (req.auth.rol === 'CLIENTE' && producto.usuarioId != req.auth.id) return res.status(403).send({ error: 'No autorizado' });
+      return res.send(producto);
     }
+    return res.send({ error: `Pedido ${pedidoId} no encontrado` });
   } catch (err) {
-    res.status(400).send(err);
+    return res.status(400).send(err);
   }
 };
 
 exports.update = async (req, res) => {
-  const { id } = req.params;
+  const { pedidoId } = req.params;
   const {
     estado, formaDePago,
   } = req.body;
   const query = {};
 
-  query.where = { id };
+  query.where = { id: pedidoId };
 
   try {
     const updateCount = await Pedido.update({
@@ -118,9 +118,9 @@ exports.update = async (req, res) => {
     }, query);
 
     if (updateCount) {
-      res.send({ message: `Pedido ${id} actualizado` });
+      res.send({ message: `Pedido ${pedidoId} actualizado` });
     } else {
-      res.send({ error: `Pedido ${id} no encontrado` });
+      res.send({ error: `Pedido ${pedidoId} no encontrado` });
     }
   } catch (err) {
     res.status(400).send(err);
@@ -128,17 +128,17 @@ exports.update = async (req, res) => {
 };
 
 exports.delete = async (req, res) => {
-  const { id } = req.params;
+  const { pedidoId } = req.params;
   const query = {};
 
-  query.where = { id };
+  query.where = { id: pedidoId };
 
   try {
     const deletedCount = await Pedido.destroy(query);
     if (deletedCount) {
-      res.send({ message: `Pedido ${id} eliminado` });
+      res.send({ message: `Pedido ${pedidoId} eliminado` });
     } else {
-      res.send({ error: `Pedido ${id} no encontrado` });
+      res.send({ error: `Pedido ${pedidoId} no encontrado` });
     }
   } catch (err) {
     res.status(400).send(err);

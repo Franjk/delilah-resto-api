@@ -8,11 +8,11 @@ const Usuario = sequelize.define('usuario', {
     unique: true,
   },
   nombre: {
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING,
     allowNull: true,
   },
   telefono: {
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING,
     allowNull: true,
   },
   email: {
@@ -24,11 +24,11 @@ const Usuario = sequelize.define('usuario', {
     },
   },
   direccion: {
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING,
     allowNull: true,
   },
   password: {
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   rol: {

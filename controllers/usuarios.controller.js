@@ -44,18 +44,18 @@ exports.readAll = async (req, res) => {
 };
 
 exports.readOne = async (req, res) => {
-  const { id } = req.params;
+  const { usuarioId } = req.params;
   const query = {};
 
   query.attributes = { exclude: ['password'] };
-  query.where = { id };
+  query.where = { id: usuarioId };
 
   try {
     const usuario = await Usuario.findOne(query);
     if (usuario) {
       res.send(usuario);
     } else {
-      res.send({ error: `Usuario ${id} no encontrado` });
+      res.send({ error: `Usuario ${usuarioId} no encontrado` });
     }
   } catch (err) {
     res.status(400).send(err);
@@ -63,13 +63,13 @@ exports.readOne = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
-  const { id } = req.params;
+  const { usuarioId } = req.params;
   const {
     username, nombre, telefono, email, direccion, rol,
   } = req.body;
   const query = {};
 
-  query.where = { id };
+  query.where = { id: usuarioId };
 
   try {
     const updateCount = await Usuario.update({
@@ -77,9 +77,9 @@ exports.update = async (req, res) => {
     }, query);
 
     if (updateCount > 0) {
-      res.send({ message: `Usuario ${id} actualizado` });
+      res.send({ message: `Usuario ${usuarioId} actualizado` });
     } else {
-      res.send({ error: `Usuario ${id} no encontrado` });
+      res.send({ error: `Usuario ${usuarioId} no encontrado` });
     }
   } catch (err) {
     res.status(400).send(err);
@@ -87,17 +87,17 @@ exports.update = async (req, res) => {
 };
 
 exports.delete = async (req, res) => {
-  const { id } = req.params;
+  const { usuarioId } = req.params;
   const query = {};
 
-  query.where = { id };
+  query.where = { id: usuarioId };
 
   try {
     const deletedCount = await Usuario.destroy(query);
     if (deletedCount > 0) {
-      res.send({ message: `Usuario ${id} eliminado` });
+      res.send({ message: `Usuario ${usuarioId} eliminado` });
     } else {
-      res.send({ error: `Usuario ${id} no encontrado` });
+      res.send({ error: `Usuario ${usuarioId} no encontrado` });
     }
   } catch (err) {
     res.status(400).send(err);

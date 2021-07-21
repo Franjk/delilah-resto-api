@@ -9,12 +9,12 @@ router.post('/', authorize(), usuariosController.create);
 
 router.get('/', authorize(), usuariosController.readAll);
 
-router.get('/:id', authorize('CLIENTE'), usuariosController.readOne);
+router.get('/:usuarioId', authorize('CLIENTE'), usuariosController.readOne);
 
-router.put('/:id', authorize('CLIENTE'), usuariosController.update);
+router.put('/:usuarioId', authorize('CLIENTE'), usuariosController.update);
 
-router.delete('/:id', authorize('CLIENTE'), usuariosController.delete);
+router.delete('/:usuarioId', authorize('CLIENTE'), usuariosController.delete);
 
-router.use('/:id/favoritos', authorize('CLIENTE'), usuariosFavoritosRouter);
+router.use('/:usuarioId/favoritos', authorize('CLIENTE'), usuariosFavoritosRouter);
 
 module.exports = router;

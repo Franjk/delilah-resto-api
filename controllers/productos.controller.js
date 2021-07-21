@@ -45,17 +45,17 @@ exports.readAll = async (req, res) => {
 };
 
 exports.readOne = async (req, res) => {
-  const { id } = req.params;
+  const { productoId } = req.params;
   const query = {};
 
-  query.where = { id };
+  query.where = { id: productoId };
 
   try {
     const producto = await Producto.findOne(query);
     if (producto) {
       res.send(producto);
     } else {
-      res.send({ error: `Producto ${id} no encontrado` });
+      res.send({ error: `Producto ${productoId} no encontrado` });
     }
   } catch (err) {
     res.status(400).send(err);
@@ -63,13 +63,13 @@ exports.readOne = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
-  const { id } = req.params;
+  const { productoId } = req.params;
   const {
     nombre, descripcion, imagen, precio,
   } = req.body;
   const query = {};
 
-  query.where = { id };
+  query.where = { id: productoId };
 
   try {
     const updateCount = await Producto.update({
@@ -77,9 +77,9 @@ exports.update = async (req, res) => {
     }, query);
 
     if (updateCount) {
-      res.send({ message: `Producto ${id} actualizado` });
+      res.send({ message: `Producto ${productoId} actualizado` });
     } else {
-      res.send({ error: `Producto ${id} no encontrado` });
+      res.send({ error: `Producto ${productoId} no encontrado` });
     }
   } catch (err) {
     res.status(400).send(err);
@@ -87,17 +87,17 @@ exports.update = async (req, res) => {
 };
 
 exports.delete = async (req, res) => {
-  const { id } = req.params;
+  const { productoId } = req.params;
   const query = {};
 
-  query.where = { id };
+  query.where = { id: productoId };
 
   try {
     const deletedCount = await Producto.destroy(query);
     if (deletedCount) {
-      res.send({ message: `Producto ${id} eliminado` });
+      res.send({ message: `Producto ${productoId} eliminado` });
     } else {
-      res.send({ error: `Producto ${id} no encontrado` });
+      res.send({ error: `Producto ${productoId} no encontrado` });
     }
   } catch (err) {
     res.status(400).send(err);
