@@ -2,16 +2,20 @@
 
 Este proyecto plantea la creación de un sistema de pedidos online para un restaurante. Deberás poner en funcionamiento las partes necesarias para montar una REST API que permita realizar altas, bajas, modificaciones y obtención de información sobre una estructura de datos que podría consumir un cliente. 
 
-## Requisitos
+## Instalacion
+
+### Requisitos
 
 - Se debe contar acceso a una base de datos mysql.
 
-## Instrucciones para su instalacion
+### Instrucciones
 
 - Descargar la aplicación.
 - Instalar las dependencias ejecutando `npm install`
 - Crear un archivo `.env` en la raíz del proyecto con las variables de entorno siguiendo el ejemplo existente en `.env.example`.
 - Iniciar la aplicación ejecutando `npm run start`.
+
+
 
 ### Ejemplo de configuracion del archivo `.env`
 
