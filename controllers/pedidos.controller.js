@@ -9,6 +9,8 @@ exports.create = async (req, res) => {
   } = req.body;
   let { usuarioId } = req.body;
 
+  // Cuando es CLIENTE toma el usuarioId del token, en cambio para cuando es ADMIN
+  // se tiene que introducir el usuario id en el body.
   if (req.auth.rol === 'CLIENTE') usuarioId = req.auth.id;
 
   const query = {};
@@ -33,7 +35,7 @@ exports.create = async (req, res) => {
 
     res.status(201).send(newPedido);
   } catch (err) {
-    res.status(400).send({ error: 'No se pudo crear el pedido' }); // en el futuro mandar solo el error message
+    res.status(400).send({ error: 'No se pudo crear el pedido', err }); // en el futuro mandar solo el error message
   }
 };
 
