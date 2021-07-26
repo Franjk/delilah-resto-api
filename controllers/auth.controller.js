@@ -11,7 +11,7 @@ exports.login = async (req, res) => {
   } else if (email) {
     where.email = email;
   } else {
-    return res.status(401).send({ error: 'Missing username or password' });
+    return res.status(401).send({ error: 'Credenciales invalidas' });
   }
 
   query.where = where;
@@ -23,9 +23,9 @@ exports.login = async (req, res) => {
       const token = jwt.sign({ id: user.id, rol: user.rol }, process.env.JWT_SECRET);
       return res.send({ token });
     }
-    return res.status(401).send({ error: 'Invalid username or password' });
+    return res.status(401).send({ error: 'Credenciales invalidas' });
   } catch (err) {
-    return res.status(400).send(err);
+    return res.status(400).send({ error: 'Error al hacer login' });
   }
 };
 
@@ -40,6 +40,6 @@ exports.register = async (req, res) => {
     });
     res.status(201).send(newUsuario);
   } catch (err) {
-    res.status(400).send(err); // en el futuro mandar solo el error message
+    res.status(400).send({ error: 'Error registrando el usuario' }); // en el futuro mandar solo el error message
   }
 };

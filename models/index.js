@@ -17,7 +17,7 @@ PedidoProducto.belongsTo(Producto);
 Usuario.belongsToMany(Producto, { through: UsuarioProducto });
 Usuario.hasMany(Pedido);
 
-UsuarioProducto.belongsTo(Usuario);
+UsuarioProducto.belongsTo(Usuario, { onDelete: 'cascade' });
 
 module.exports = {
   PedidoProducto,

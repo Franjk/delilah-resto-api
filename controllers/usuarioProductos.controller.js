@@ -10,7 +10,7 @@ exports.create = async (req, res) => {
     });
     res.status(201).send(newUsuarioProducto);
   } catch (err) {
-    res.status(400).send(err); // en el futuro mandar solo el error message
+    res.status(400).send({ error: 'No se pudo crear el favorito' }); // en el futuro mandar solo el error message
   }
 };
 
@@ -34,7 +34,7 @@ exports.readAll = async (req, res) => {
     const productos = await UsuarioProducto.findAll(query);
     res.send(productos);
   } catch (err) {
-    res.status(400).send(err);
+    res.status(400).send({ error: 'No se pudo recuperar el favorito' });
   }
 };
 
@@ -53,7 +53,7 @@ exports.readOne = async (req, res) => {
       res.send({ error: `Favorito ${productoId} del usuario ${usuarioId} no encontrado` });
     }
   } catch (err) {
-    res.status(400).send(err);
+    res.status(400).send({ error: 'No se pudo actualizar el favorito' });
   }
 };
 
@@ -71,6 +71,6 @@ exports.delete = async (req, res) => {
       res.send({ error: `Favorito ${productoId} del usuario ${usuarioId} no encontrado` });
     }
   } catch (err) {
-    res.status(400).send(err);
+    res.status(400).send({ error: 'No se pudo eliminar el favorito' });
   }
 };

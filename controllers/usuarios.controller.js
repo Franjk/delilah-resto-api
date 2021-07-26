@@ -12,7 +12,7 @@ exports.create = async (req, res) => {
     });
     res.status(201).send(newUsuario);
   } catch (err) {
-    res.status(400).send(err); // en el futuro mandar solo el error message
+    res.status(400).send({ error: 'No se pudo crear el usuario' }); // en el futuro mandar solo el error message
   }
 };
 
@@ -39,7 +39,7 @@ exports.readAll = async (req, res) => {
     const usuarios = await Usuario.findAll(query);
     res.send(usuarios);
   } catch (err) {
-    res.status(400).send(err);
+    res.status(400).send({ error: 'No se pudo recuperar el usuario' });
   }
 };
 
@@ -58,7 +58,7 @@ exports.readOne = async (req, res) => {
       res.send({ error: `Usuario ${usuarioId} no encontrado` });
     }
   } catch (err) {
-    res.status(400).send(err);
+    res.status(400).send({ error: 'No se pudo recuperar el usuario' });
   }
 };
 
@@ -82,7 +82,7 @@ exports.update = async (req, res) => {
       res.send({ error: `Usuario ${usuarioId} no encontrado` });
     }
   } catch (err) {
-    res.status(400).send(err);
+    res.status(400).send({ error: 'No se pudo actualizar el usuario' });
   }
 };
 
@@ -100,6 +100,6 @@ exports.delete = async (req, res) => {
       res.send({ error: `Usuario ${usuarioId} no encontrado` });
     }
   } catch (err) {
-    res.status(400).send(err);
+    res.status(400).send({ error: 'No se pudo eliminar el usuario' });
   }
 };

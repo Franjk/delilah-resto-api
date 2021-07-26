@@ -12,7 +12,7 @@ exports.create = async (req, res) => {
     });
     res.status(201).send(newProducto);
   } catch (err) {
-    res.status(400).send(err); // en el futuro mandar solo el error message
+    res.status(400).send({ error: 'No se pudo crear el producto' }); // en el futuro mandar solo el error message
   }
 };
 
@@ -40,7 +40,7 @@ exports.readAll = async (req, res) => {
     const productos = await Producto.findAll(query);
     res.send(productos);
   } catch (err) {
-    res.status(400).send(err);
+    res.status(400).send({ error: 'No se pudo recuperar el producto' });
   }
 };
 
@@ -58,7 +58,7 @@ exports.readOne = async (req, res) => {
       res.send({ error: `Producto ${productoId} no encontrado` });
     }
   } catch (err) {
-    res.status(400).send(err);
+    res.status(400).send({ error: 'No se pudo recuperar el producto' });
   }
 };
 
@@ -82,7 +82,7 @@ exports.update = async (req, res) => {
       res.send({ error: `Producto ${productoId} no encontrado` });
     }
   } catch (err) {
-    res.status(400).send(err);
+    res.status(400).send({ error: 'No se pudo actualizar el producto' });
   }
 };
 
@@ -100,6 +100,6 @@ exports.delete = async (req, res) => {
       res.send({ error: `Producto ${productoId} no encontrado` });
     }
   } catch (err) {
-    res.status(400).send(err);
+    res.status(400).send({ error: 'No se pudo eliminar el producto' });
   }
 };
