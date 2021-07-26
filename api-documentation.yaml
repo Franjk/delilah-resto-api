@@ -1,0 +1,711 @@
+swagger: "2.0"
+info:
+  title: "Delilah Resto"
+  description: "API para la gestion de pedidos de Delilah Resto"
+  version: "1.0"
+host: "localhost"
+basePath: "/api"
+paths:
+  /auth/register:
+    post:
+      summary: Registra un nuevo usuario
+      parameters:
+      - in: body
+        name: usuario
+        description: El usuario a crear
+        schema:
+          $ref: '#/definitions/Usuario'
+      responses:
+        201:
+          description: Usuario registrado
+          schema:
+            $ref: '#/definitions/Usuario'
+        400:
+          description: Error
+          schema:
+            $ref: '#/definitions/Error'
+            
+  /auth/login:
+    post:
+      summary: Loguea al usuario
+      parameters:
+      - in: body
+        name: datos de conexion
+        description: Datos para autenticar al usuario
+        schema:
+          type: object
+          properties:
+            username:
+              type: string
+            email:
+              type: string
+            password:
+              type: string
+      responses:
+        200:
+          description: Logueado
+          schema:
+            $ref: '#/definitions/Token'
+        400:
+          description: Error
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Error en las credenciales
+          schema:
+            $ref: '#/definitions/Error'
+    
+  /pedidos:
+    post:
+      summary: Crea un pedido
+      description: Si lo manda un usuario con el rol de CLIENTE entonces se creara el pedido con usuarioId igual al del usuario. En cambio si el rol del usuario es ADMIN, es obligatorio que se envie el usuarioId en el body.
+      parameters:
+      - in: body
+        name: Datos del pedido
+        schema:
+          $ref: '#/definitions/Pedido'
+      responses:
+        201:
+          description: Pedido creado
+          schema:
+            $ref: '#/definitions/Pedido'
+        400:
+          description: Error al crear pedido
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          $ref: '#/responses/Unauthenticated'
+        403:
+          $ref: '#/responses/Unauthorized'
+      
+    get:
+      summary: Obtiene una lista de pedidos
+      parameters:
+      - in: query
+        name: limit
+        type: integer
+      - in: query
+        name: offset
+        type: integer
+      - in: query
+        name: estado
+        description: Valores posibles = NUEVO, CONFIRMADO, PREPARANDO, ENVIANDO, CANCELADO, ENTREGADO
+        type: string
+      - in: query
+        name: formaDePago
+        description: Valores posibles = CONTADO, TARJETA
+        type: string
+      - in: query
+        name: total
+        type: number
+      - in: query
+        name: minTotal
+        type: number
+      - in: query
+        name: maxTotal
+        type: number
+      responses:
+        200: 
+          description: Array de pedidos
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PedidoRespuesta'
+        400:
+          description: Error al obtener pedidos
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          $ref: '#/responses/Unauthenticated'
+
+  /pedidos/{pedidoId}:
+    get:
+      summary: Obtiene un pedido
+      description: En caso de que sea un usuario con rol 'CLIENTE' quien lo solicite solo podra recuperar pedidos que le pertenezcan
+      parameters:
+      - in: path
+        name: pedidoId
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Pedido
+          schema:
+            $ref: '#/definitions/PedidoRespuesta'
+        400:
+          description: Error al obtener el pedido
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          $ref: '#/responses/Unauthenticated'
+        403:
+          $ref: '#/responses/Unauthorized'
+    
+    put:
+      summary: Modifica un pedido
+      parameters:
+      - in: path
+        name: pedidoId
+        type: integer
+        required: true
+      - in: body
+        name: pedido
+        schema:
+          type: object
+          properties:
+            estado:
+              type: string
+              enum: [NUEVO, CONFIRMADO, PREPARANDO, ENVIANDO, CANCELADO, ENTREGADO]
+            formaDePago:
+              type: string
+              enum: [CONTADO, TARJETA]
+      responses:
+        200:
+          description: Pedido modificado
+          schema:
+            $ref: '#/definitions/Message'
+        400:
+          description: Error al modificar el pedido
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          $ref: '#/responses/Unauthenticated'
+        403:
+          $ref: '#/responses/Unauthorized'
+        
+
+    delete:
+      summary: Elimina un pedido
+      parameters:
+      - in: path
+        name: pedidoId
+        type: integer
+        required: true
+      responses:
+        200:
+          description: Pedido eliminado
+          schema:
+            $ref: '#/definitions/Message'
+        400:
+          description: Error al eliminar pedido
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          $ref: '#/responses/Unauthenticated'
+        403:
+          $ref: '#/responses/Unauthorized'
+              
+  
+  /productos:
+    post:
+      summary: Crea un producto
+      description: Solo puede hacerlo un usuario con el rol ADMIN
+      parameters:
+      - in: body
+        name: Producto
+        schema:
+          $ref: '#/definitions/Producto'
+      responses:
+        201: 
+          description: Producto creado
+          schema:
+            $ref: '#/definitions/ProductoRespuesta'
+        400:
+          description: Error
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          $ref: '#/responses/Unauthenticated'
+        403:
+          $ref: '#/responses/Unauthorized'
+      
+    get:
+      summary: Obtiene una lista de productos
+      parameters:
+      - in: query
+        name: limit
+        type: integer
+      - in: query
+        name: offset
+        type: integer
+      - in: query
+        name: nombre
+        type: string
+      - in: query
+        name: description
+        type: string
+      - in: query
+        name: imagen
+        type: string
+      - in: query
+        name: precio
+        type: number
+      - in: query
+        name: minPrecio
+        type: number
+      - in: query
+        name: maxPrecio
+        type: number
+      responses:
+        200:
+          description: Array de productos
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ProductoRespuesta'
+        400:
+          description: Error
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          $ref: '#/responses/Unauthenticated'
+
+  /productos/{productoId}:
+    get:
+      summary: Obtiene un producto
+      parameters:
+      - in: path
+        name: productoId
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Producto
+          schema:
+            $ref: '#/definitions/ProductoRespuesta'
+        400:
+          description: Error
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          $ref: '#/responses/Unauthenticated'
+        403:
+          $ref: '#/responses/Unauthorized'
+      
+    put:
+      summary: Modifica un producto
+      parameters:
+      - in: path
+        name: productoId
+        required: true
+        type: integer
+      - in: body
+        name: Producto
+        schema:
+          $ref: '#/definitions/Producto'
+      responses:
+        200:
+          description: Producto Modificado
+          schema:
+            $ref: '#/definitions/Message'
+        400:
+          description: Error
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          $ref: '#/responses/Unauthenticated'
+        403:
+          $ref: '#/responses/Unauthorized'
+            
+    delete:
+      summary: Elimina un producto
+      parameters:
+      - in: path
+        name: productoId
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Producto Eliminado
+          schema:
+            $ref: '#/definitions/Message'
+        400:
+          description: Error
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          $ref: '#/responses/Unauthenticated'
+        403:
+          $ref: '#/responses/Unauthorized'
+            
+
+  /usuarios:
+    post:
+      summary: Crea un nuevo usuario
+      parameters:
+      - in: body
+        name: usuario
+        description: El usuario a crear
+        schema:
+          $ref: '#/definitions/Usuario'
+      responses:
+        201:
+          description: Usuario creado
+          schema:
+            $ref: '#/definitions/UsuarioRespuesta'
+        400:
+          description: Error
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          $ref: '#/responses/Unauthenticated'
+        403:
+          $ref: '#/responses/Unauthorized'
+            
+    get:
+      summary: Obtiene una lista de usuarios
+      description: Si el rol del usuario es 'CLIENTE' entonces solo se recuperara a si mismo
+      parameters:
+      - in: query
+        name: limit
+        type: integer
+      - in: query
+        name: offset
+        type: integer
+      - in: query
+        name: username
+        type: string
+      - in: query
+        name: nombre
+        type: string
+      - in: query
+        name: telefono
+        type: string
+      - in: query
+        name: email
+        type: string
+      - in: query
+        name: direccion
+        type: string
+      - in: query
+        name: rol
+        type: string
+      responses:
+        200:
+          description: Array de usuarios
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/UsuarioRespuesta'
+        400:
+          description: Error
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          $ref: '#/responses/Unauthenticated'
+
+  /usuarios/{usuarioId}:
+    get:
+      summary: Obtiene un usuario
+      description: En caso de que el usuario tenga el rol 'CLIENTE' solo podra recuperarse a si mismo
+      parameters:
+      - in: path
+        name: usuarioId
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Usuario
+          schema:
+            $ref: '#/definitions/UsuarioRespuesta'
+        400:
+          description: Error
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          $ref: '#/responses/Unauthenticated'
+        403:
+          $ref: '#/responses/Unauthorized'
+      
+    put:
+      summary: Modifica un usuario
+      description: En caso de que el usuario tenga el rol 'CLIENTE' solo podra modificarse a si mismo
+      parameters:
+      - in: path
+        name: usuarioId
+        required: true
+        type: integer
+      - in: body
+        name: Usuario
+        schema:
+          $ref: '#/definitions/Usuario'
+      responses:
+        200:
+          description: Usuario modificado
+          schema:
+            $ref: '#/definitions/Message'
+        400:
+          description: Error
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          $ref: '#/responses/Unauthenticated'
+        403:
+          $ref: '#/responses/Unauthorized'
+            
+    delete:
+      summary: Elimina un usuario
+      description: En caso de que el usuario tenga el rol 'CLIENTE' solo podra eliminarse a si mismo
+      parameters:
+      - in: path
+        name: usuarioId
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Usuario eliminado
+          schema:
+            $ref: '#/definitions/Message'
+        400:
+          description: Error
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          $ref: '#/responses/Unauthenticated'
+        403:
+          $ref: '#/responses/Unauthorized'
+            
+  /usuarios/{usuarioId}/favoritos:
+    post:
+      summary: Crea un nuevo producto favorito para el usuario
+      description: En caso de que el usuario tenga el rol 'CLIENTE' entonces solo podra establecer productos favoritos para el mismo.
+      parameters:
+      - in: path
+        name: usuarioId
+        required: true
+        type: integer
+      - in: body
+        name: Producto
+        schema:
+          $ref: '#/definitions/Favorito'
+      responses:
+        201:
+          description: Favorito creado
+          schema:
+            $ref: '#/definitions/FavoritoRespuesta'
+        400:
+          description: Error
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          $ref: '#/responses/Unauthenticated'
+        403:
+          $ref: '#/responses/Unauthorized'
+          
+    get:
+      summary: Obtiene la lista de productos favoritos del usuario
+      parameters:
+      - in: path
+        name: usuarioId
+        required: true
+        type: integer
+      responses:
+        200: 
+          description: Array de productos favoritos
+          schema:
+            $ref: '#/definitions/FavoritoRespuesta'
+        400:
+          description: Error
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          $ref: '#/responses/Unauthenticated'
+        403:
+          $ref: '#/responses/Unauthorized'
+  
+  /usuarios/{usuarioId}/favoritos/{productoId}:
+    get:
+      summary: Obtiene un producto favorito
+      parameters:
+      - in: path
+        name: usuarioId
+        required: true
+        type: integer
+      - in: path
+        name: productoId
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Producto Favorito
+          schema:
+            $ref: '#/definitions/FavoritoRespuesta'
+        400:
+          description: Error
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          $ref: '#/responses/Unauthenticated'
+        403:
+          $ref: '#/responses/Unauthorized'
+            
+    delete:
+      summary: Elimina un producto favorito
+      parameters:
+      - in: path
+        name: usuarioId
+        required: true
+        type: integer
+      - in: path
+        name: productoId
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Producto Favorito eliminado
+          schema:
+            $ref: '#/definitions/Message'
+        400:
+          description: Error
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          $ref: '#/responses/Unauthenticated'
+        403:
+          $ref: '#/responses/Unauthorized'
+
+
+
+
+definitions:
+  Usuario:
+    type: object
+    properties:
+      username:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      nombre:
+        type: string
+      direccion:
+        type: string
+      telefono:
+        type: string
+      rol:
+        type: string
+  UsuarioRespuesta:
+    type: object
+    properties:
+      id:
+        type: integer
+      username:
+        type: string
+      email:
+        type: string
+      nombre:
+        type: string
+      direccion:
+        type: string
+      telefono:
+        type: string
+      rol:
+        type: string
+  
+  Producto:
+    type: object
+    properties:
+      nombre:
+        type: string
+      descripcion:
+        type: string
+      imagen:
+        type: string     
+      precio:
+        type: number
+  ProductoRespuesta:
+    type: object
+    properties:
+      id: 
+        type: integer
+      nombre:
+        type: string
+      descripcion:
+        type: string
+      imagen:
+        type: string       
+      precio:
+        type: number
+        
+  Pedido:
+    type: object
+    properties:
+      estado:
+        type: string
+        enum: [NUEVO, CONFIRMADO, PREPARANDO, ENVIANDO, CANCELADO, ENTREGADO]
+      formaDePago:
+        type: string
+        enum: [CONTADO, TARJETA]
+      usuarioId:
+        type: integer
+      pedidoProductos:
+        type: object
+        properties:
+          productoId:
+            type: integer
+          cantidad:
+            type: string
+  PedidoRespuesta:
+    type: object
+    properties:
+      estado:
+        type: string
+        enum: [NUEVO, CONFIRMADO, PREPARANDO, ENVIANDO, CANCELADO, ENTREGADO]
+      formaDePago:
+        type: string
+        enum: [CONTADO, TARJETA]
+      usuarioId:
+        type: integer
+      pedidoProductos:
+        type: object
+        properties:
+          productoId:
+            type: integer
+          cantidad:
+            type: string
+          precioUnitario:
+            type: number
+            
+  Favorito:
+    type: object
+    properties:
+      productoId:
+        type: integer
+  FavoritoRespuesta:
+    type: object
+    properties:
+      productoId:
+        type: integer
+      usuarioId:
+        type: integer
+    
+  Error:
+    type: object
+    properties:
+      error:
+        type: string
+        
+  Message:
+    type: object
+    properties:
+      message:
+        type: string
+        
+  Token:
+    type: object
+    properties:
+      token:
+        type: string
+        
+responses:
+  Unauthenticated: 
+    description: El usuario no esta autenticado
+    schema:
+      $ref: '#/definitions/Error'
+    
+  Unauthorized:
+    description: El usuario no esta autorizado.
+    schema:
+      $ref: '#/definitions/Error'
+        
