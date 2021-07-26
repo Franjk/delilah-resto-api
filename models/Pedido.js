@@ -13,7 +13,10 @@ const Pedido = sequelize.define('pedido', {
   formaDePago: {
     type: DataTypes.STRING,
     allowNull: true,
-    defaultValue: 'Contado',
+    defaultValue: 'CONTADO',
+    validate: {
+      isIn: [['CONTADO', 'TARJETA']],
+    },
   },
 }, {
   sequelize,
