@@ -49,7 +49,7 @@ PORT=4000
 
 ## Documentacion
 
-La documentación de la API puede encontrarse en el archivo `api-documentation.yaml` presente en el directorio raóz del repositorio.
+La documentación de la API puede encontrarse en el archivo `api-documentation.yaml` presente en el directorio raíz del repositorio.
 
 
 
