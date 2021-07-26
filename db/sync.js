@@ -6,7 +6,7 @@ require('../models');
 async function sync(options) {
   await sequelize.sync(options);
   console.log('Database synched');
-  if (options.force) populate();
+  if (options.force && process.env.POPULATE_DB === 'true') populate();
 }
 
 module.exports = sync;

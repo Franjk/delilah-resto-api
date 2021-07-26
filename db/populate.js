@@ -3,6 +3,7 @@ const {
 } = require('../models');
 
 async function populate() {
+  console.log('Populating DB');
   await Producto.bulkCreate([
     { nombre: 'Pasta', precio: 123.5 },
     { nombre: 'Asado', precio: 256 },
