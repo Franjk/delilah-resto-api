@@ -7,7 +7,7 @@ const Producto = sequelize.define('producto', {
     unique: true,
   },
   descripcion: {
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING,
   },
   imagen: {
     type: DataTypes.STRING,
@@ -17,7 +17,7 @@ const Producto = sequelize.define('producto', {
   },
   precio: {
     type: DataTypes.DOUBLE,
-    allowNull: true,
+    allowNull: false,
   },
 }, {
   sequelize,

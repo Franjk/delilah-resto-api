@@ -4,7 +4,7 @@ const sequelize = require('../db/connection');
 const PedidoProducto = sequelize.define('pedidoProducto', {
   cantidad: {
     type: DataTypes.INTEGER,
-    allowNull: true,
+    allowNull: false,
   },
   precioUnitario: {
     type: DataTypes.DOUBLE,
