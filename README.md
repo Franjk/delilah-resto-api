@@ -38,7 +38,7 @@ DB_HOST=localhost
 # El entorno development fuerza una sincronizacion de la base de datos.
 NODE_ENV=development
 
-# Si esta en true y la base de datos se sincroniza forzadamente entonces carga la
+# Si esta en true y el entorno es de 'development' entonces carga
 # las tablas con datos de ejemplo.
 POPULATE_DB=true
 
