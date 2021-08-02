@@ -6,7 +6,11 @@ const apiRouter = require('./routes/router');
 
 const { NODE_ENV, PORT } = process.env;
 
-if (NODE_ENV === 'development') sync({ force: true });
+if (NODE_ENV === 'development') {
+  sync({ force: true });
+} else if (NODE_ENV === 'production') {
+  sync({ alter: true });
+}
 
 const app = express();
 

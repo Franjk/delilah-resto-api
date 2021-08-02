@@ -10,7 +10,6 @@ Este proyecto plantea la creación de un sistema de pedidos online para un resta
 
 ### Instrucciones
 
-- Descargar la aplicación.
 - Instalar las dependencias ejecutando `npm install`
 - Crear un archivo `.env` en la raíz del proyecto con las variables de entorno siguiendo el ejemplo existente en `.env.example`.
 - Iniciar la aplicación ejecutando `npm run start`.
@@ -49,7 +48,7 @@ PORT=4000
 
 ## Documentacion
 
-La documentación de la API puede encontrarse en el archivo `api-documentation.yaml` presente en el directorio raíz del repositorio.
+La documentación de la API puede encontrarse en los archivos `api-documentation.yaml` y `api-documentation.html` presentes en el directorio raíz del repositorio.
 
 
 

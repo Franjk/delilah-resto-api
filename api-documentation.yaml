@@ -3,11 +3,12 @@ info:
   title: "Delilah Resto"
   description: "API para la gestion de pedidos de Delilah Resto"
   version: "1.0"
-host: "localhost"
+host: "host"
 basePath: "/api"
 paths:
   /auth/register:
     post:
+      tags: [Auth]
       summary: Registra un nuevo usuario
       parameters:
       - in: body
@@ -27,6 +28,7 @@ paths:
             
   /auth/login:
     post:
+      tags: [Auth]
       summary: Loguea al usuario
       parameters:
       - in: body
@@ -57,6 +59,7 @@ paths:
     
   /pedidos:
     post:
+      tags: [Pedidos]
       summary: Crea un pedido
       description: Si lo manda un usuario con el rol de CLIENTE entonces se creara el pedido con usuarioId igual al del usuario. En cambio si el rol del usuario es ADMIN, es obligatorio que se envie el usuarioId en el body.
       parameters:
@@ -79,6 +82,7 @@ paths:
           $ref: '#/responses/Unauthorized'
       
     get:
+      tags: [Pedidos]
       summary: Obtiene una lista de pedidos
       parameters:
       - in: query
@@ -120,6 +124,7 @@ paths:
 
   /pedidos/{pedidoId}:
     get:
+      tags: [Pedidos]
       summary: Obtiene un pedido
       description: En caso de que sea un usuario con rol 'CLIENTE' quien lo solicite solo podra recuperar pedidos que le pertenezcan
       parameters:
@@ -142,6 +147,7 @@ paths:
           $ref: '#/responses/Unauthorized'
     
     put:
+      tags: [Pedidos]
       summary: Modifica un pedido
       parameters:
       - in: path
@@ -175,6 +181,7 @@ paths:
         
 
     delete:
+      tags: [Pedidos]
       summary: Elimina un pedido
       parameters:
       - in: path
@@ -198,6 +205,7 @@ paths:
   
   /productos:
     post:
+      tags: [Producto]
       summary: Crea un producto
       description: Solo puede hacerlo un usuario con el rol ADMIN
       parameters:
@@ -220,6 +228,7 @@ paths:
           $ref: '#/responses/Unauthorized'
       
     get:
+      tags: [Producto]
       summary: Obtiene una lista de productos
       parameters:
       - in: query
@@ -262,6 +271,7 @@ paths:
 
   /productos/{productoId}:
     get:
+      tags: [Producto]
       summary: Obtiene un producto
       parameters:
       - in: path
@@ -283,6 +293,7 @@ paths:
           $ref: '#/responses/Unauthorized'
       
     put:
+      tags: [Producto]
       summary: Modifica un producto
       parameters:
       - in: path
@@ -308,6 +319,7 @@ paths:
           $ref: '#/responses/Unauthorized'
             
     delete:
+      tags: [Producto]
       summary: Elimina un producto
       parameters:
       - in: path
@@ -331,6 +343,7 @@ paths:
 
   /usuarios:
     post:
+      tags: [Usuarios]
       summary: Crea un nuevo usuario
       parameters:
       - in: body
@@ -353,6 +366,7 @@ paths:
           $ref: '#/responses/Unauthorized'
             
     get:
+      tags: [Usuarios]
       summary: Obtiene una lista de usuarios
       description: Si el rol del usuario es 'CLIENTE' entonces solo se recuperara a si mismo
       parameters:
@@ -396,6 +410,7 @@ paths:
 
   /usuarios/{usuarioId}:
     get:
+      tags: [Usuarios]
       summary: Obtiene un usuario
       description: En caso de que el usuario tenga el rol 'CLIENTE' solo podra recuperarse a si mismo
       parameters:
@@ -418,6 +433,7 @@ paths:
           $ref: '#/responses/Unauthorized'
       
     put:
+      tags: [Usuarios]
       summary: Modifica un usuario
       description: En caso de que el usuario tenga el rol 'CLIENTE' solo podra modificarse a si mismo
       parameters:
@@ -444,6 +460,7 @@ paths:
           $ref: '#/responses/Unauthorized'
             
     delete:
+      tags: [Usuarios]
       summary: Elimina un usuario
       description: En caso de que el usuario tenga el rol 'CLIENTE' solo podra eliminarse a si mismo
       parameters:
@@ -467,6 +484,7 @@ paths:
             
   /usuarios/{usuarioId}/favoritos:
     post:
+      tags: [Favoritos]
       summary: Crea un nuevo producto favorito para el usuario
       description: En caso de que el usuario tenga el rol 'CLIENTE' entonces solo podra establecer productos favoritos para el mismo.
       parameters:
@@ -493,6 +511,7 @@ paths:
           $ref: '#/responses/Unauthorized'
           
     get:
+      tags: [Favoritos]
       summary: Obtiene la lista de productos favoritos del usuario
       parameters:
       - in: path
@@ -515,6 +534,7 @@ paths:
   
   /usuarios/{usuarioId}/favoritos/{productoId}:
     get:
+      tags: [Favoritos]
       summary: Obtiene un producto favorito
       parameters:
       - in: path
@@ -540,6 +560,7 @@ paths:
           $ref: '#/responses/Unauthorized'
             
     delete:
+      tags: [Favoritos]
       summary: Elimina un producto favorito
       parameters:
       - in: path
