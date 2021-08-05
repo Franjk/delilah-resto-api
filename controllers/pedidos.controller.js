@@ -1,6 +1,6 @@
 const { Op } = require('sequelize');
 const {
-  Pedido, Producto, PedidoProducto,
+  Pedido, Producto, PedidoProducto, Usuario,
 } = require('../models');
 
 exports.create = async (req, res) => {
@@ -14,9 +14,13 @@ exports.create = async (req, res) => {
   if (req.auth.rol === 'CLIENTE') usuarioId = req.auth.id;
 
   const query = {};
-  query.where = { id: { [Op.in]: pedidoProductos.map((el) => el.productoId) } };
 
   try {
+    query.where = { id: usuarioId };
+    const usuarioData = await Usuario.findOne(query);
+    const { direccion } = usuarioData;
+
+    query.where = { id: { [Op.in]: pedidoProductos.map((el) => el.productoId) } };
     const productosData = await Producto.findAll(query);
 
     productosData.forEach((pd) => {
@@ -26,7 +30,7 @@ exports.create = async (req, res) => {
 
     const newPedido = await Pedido.create(
       {
-        estado, formaDePago, usuarioId, pedidoProductos,
+        estado, formaDePago, usuarioId, direccion, pedidoProductos,
       },
       {
         include: PedidoProducto,

@@ -18,6 +18,10 @@ const Pedido = sequelize.define('pedido', {
       isIn: [['CONTADO', 'TARJETA']],
     },
   },
+  direccion: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 }, {
   sequelize,
   tableName: 'Pedidos',

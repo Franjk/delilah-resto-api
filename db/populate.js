@@ -16,19 +16,19 @@ async function populate() {
 
   await Usuario.bulkCreate([
     {
-      username: 'admin', nombre: 'administrador', password: '123', email: 'admin@mail.com', rol: 'ADMIN',
+      username: 'admin', nombre: 'administrador', password: '123', email: 'admin@mail.com', rol: 'ADMIN', direccion: 'ABC 123',
     },
 
     {
-      username: 'cliente', nombre: 'cliente', password: '123', email: 'cliente@mail.com', rol: 'CLIENTE',
+      username: 'cliente', nombre: 'cliente', password: '123', email: 'cliente@mail.com', rol: 'CLIENTE', direccion: 'ABC 987',
     },
 
     {
-      username: 'fran', nombre: 'francisco', password: '123', email: 'fran@mail.com', rol: 'ADMIN',
+      username: 'fran', nombre: 'francisco', password: '123', email: 'fran@mail.com', rol: 'ADMIN', direccion: 'XYZ 987',
     },
 
     {
-      username: 'jose', nombre: 'jose', password: '123', email: 'jose@mail.com', rol: 'CLIENTE',
+      username: 'jose', nombre: 'jose', password: '123', email: 'jose@mail.com', rol: 'CLIENTE', direccion: 'XYZ 123',
     },
   ]);
 
