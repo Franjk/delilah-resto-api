@@ -9,7 +9,7 @@ const sequelize = new Sequelize(DB_DATABASE, DB_USERNAME, DB_PASSWORD, {
   dialect: 'mysql',
   // logging: (...msg) => console.log(msg),
   define: {
-    timestamps: false,
+    timestamps: true,
   },
 });
 
