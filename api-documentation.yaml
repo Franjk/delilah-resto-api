@@ -623,6 +623,12 @@ definitions:
         type: string
       rol:
         type: string
+      createdAt:
+        type: string
+        format: date-time
+      updatedAt:
+        type: string
+        format: date-time
   
   Producto:
     type: object
@@ -648,6 +654,12 @@ definitions:
         type: string       
       precio:
         type: number
+      createdAt:
+        type: string
+        format: date-time
+      updatedAt:
+        type: string
+        format: date-time
         
   Pedido:
     type: object
@@ -678,6 +690,14 @@ definitions:
         enum: [CONTADO, TARJETA]
       usuarioId:
         type: integer
+      direccion:
+        type: string
+      createdAt:
+        type: string
+        format: date-time
+      updatedAt:
+        type: string
+        format: date-time
       pedidoProductos:
         type: object
         properties:
@@ -700,6 +720,12 @@ definitions:
         type: integer
       usuarioId:
         type: integer
+      createdAt:
+        type: string
+        format: date-time
+      updatedAt:
+        type: string
+        format: date-time
     
   Error:
     type: object

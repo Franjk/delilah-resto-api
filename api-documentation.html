@@ -698,15 +698,15 @@ margin-bottom: 20px;
     var defs = {}
         defs["Error"] = {"type":"object","properties":{"error":{"type":"string"}}};
         defs["Favorito"] = {"type":"object","properties":{"productoId":{"type":"integer"}}};
-        defs["FavoritoRespuesta"] = {"type":"object","properties":{"productoId":{"type":"integer"},"usuarioId":{"type":"integer"}}};
+        defs["FavoritoRespuesta"] = {"type":"object","properties":{"productoId":{"type":"integer"},"usuarioId":{"type":"integer"},"createdAt":{"type":"string","format":"date-time"},"updatedAt":{"type":"string","format":"date-time"}}};
         defs["Message"] = {"type":"object","properties":{"message":{"type":"string"}}};
         defs["Pedido"] = {"type":"object","properties":{"estado":{"type":"string","enum":["NUEVO","CONFIRMADO","PREPARANDO","ENVIANDO","CANCELADO","ENTREGADO"]},"formaDePago":{"type":"string","enum":["CONTADO","TARJETA"]},"usuarioId":{"type":"integer"},"pedidoProductos":{"type":"object","properties":{"productoId":{"type":"integer"},"cantidad":{"type":"string"}}}}};
-        defs["PedidoRespuesta"] = {"type":"object","properties":{"estado":{"type":"string","enum":["NUEVO","CONFIRMADO","PREPARANDO","ENVIANDO","CANCELADO","ENTREGADO"]},"formaDePago":{"type":"string","enum":["CONTADO","TARJETA"]},"usuarioId":{"type":"integer"},"pedidoProductos":{"type":"object","properties":{"productoId":{"type":"integer"},"cantidad":{"type":"string"},"precioUnitario":{"type":"number"}}}}};
+        defs["PedidoRespuesta"] = {"type":"object","properties":{"estado":{"type":"string","enum":["NUEVO","CONFIRMADO","PREPARANDO","ENVIANDO","CANCELADO","ENTREGADO"]},"formaDePago":{"type":"string","enum":["CONTADO","TARJETA"]},"usuarioId":{"type":"integer"},"direccion":{"type":"string"},"createdAt":{"type":"string","format":"date-time"},"updatedAt":{"type":"string","format":"date-time"},"pedidoProductos":{"type":"object","properties":{"productoId":{"type":"integer"},"cantidad":{"type":"string"},"precioUnitario":{"type":"number"}}}}};
         defs["Producto"] = {"type":"object","properties":{"nombre":{"type":"string"},"descripcion":{"type":"string"},"imagen":{"type":"string"},"precio":{"type":"number"}}};
-        defs["ProductoRespuesta"] = {"type":"object","properties":{"id":{"type":"integer"},"nombre":{"type":"string"},"descripcion":{"type":"string"},"imagen":{"type":"string"},"precio":{"type":"number"}}};
+        defs["ProductoRespuesta"] = {"type":"object","properties":{"id":{"type":"integer"},"nombre":{"type":"string"},"descripcion":{"type":"string"},"imagen":{"type":"string"},"precio":{"type":"number"},"createdAt":{"type":"string","format":"date-time"},"updatedAt":{"type":"string","format":"date-time"}}};
         defs["Token"] = {"type":"object","properties":{"token":{"type":"string"}}};
         defs["Usuario"] = {"type":"object","properties":{"username":{"type":"string"},"email":{"type":"string"},"password":{"type":"string"},"nombre":{"type":"string"},"direccion":{"type":"string"},"telefono":{"type":"string"},"rol":{"type":"string"}}};
-        defs["UsuarioRespuesta"] = {"type":"object","properties":{"id":{"type":"integer"},"username":{"type":"string"},"email":{"type":"string"},"nombre":{"type":"string"},"direccion":{"type":"string"},"telefono":{"type":"string"},"rol":{"type":"string"}}};
+        defs["UsuarioRespuesta"] = {"type":"object","properties":{"id":{"type":"integer"},"username":{"type":"string"},"email":{"type":"string"},"nombre":{"type":"string"},"direccion":{"type":"string"},"telefono":{"type":"string"},"rol":{"type":"string"},"createdAt":{"type":"string","format":"date-time"},"updatedAt":{"type":"string","format":"date-time"}}};
   </script>
 
   <div class="container-fluid">
